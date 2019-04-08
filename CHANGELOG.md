@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Method in `TranslationsHelper` to check if translations are enabled
 - This changelog (:
 - Default value to `available_languages` param
+### Fixed
+- Wrong format for `available_languages` param
 
 ## [v0.1.1](https://github.com/compagnie-hyperactive/TranslateBundle/releases/tag/v0.1.1) – 2019-04-08
 ### Fixed

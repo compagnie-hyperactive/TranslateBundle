@@ -42,7 +42,7 @@ class TranslationsHelper
     public function getAvailableLanguages(): array
     {
         if (!$this->availableLanguages) {
-            $this->availableLanguages = $this->params->get('available_languages');
+            $this->availableLanguages = $this->params->get('lch.translate.available_languages');
         }
 
         return $this->availableLanguages;
