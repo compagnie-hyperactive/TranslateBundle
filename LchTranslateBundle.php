@@ -2,8 +2,6 @@
 
 namespace LchTranslateBundle;
 
-use LchTranslateBundle\DependencyInjection\LchTranslateExtension;
-use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
@@ -12,15 +10,4 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class LchTranslateBundle extends Bundle
 {
-    /**
-     * @inheritdoc
-     */
-    public function getContainerExtension(): Extension
-    {
-        if (!$this->extension) {
-            $this->extension = new LchTranslateExtension();
-        }
-
-        return $this->extension;
-    }
 }
