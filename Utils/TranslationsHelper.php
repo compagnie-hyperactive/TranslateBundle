@@ -49,6 +49,20 @@ class TranslationsHelper
     }
 
     /**
+     * Checks if Translate bundle system is available,
+     * through checking if `available_languages` parameter
+     * is set and not empty.
+     *
+     * @return bool
+     */
+    public function isTranslationSystemEnabled(): bool
+    {
+        $availableLanguages = $this->getAvailableLanguages();
+
+        return is_array($availableLanguages) && !empty($availableLanguages);
+    }
+
+    /**
      * Checks if given object or class uses Translatable trait.
      *
      * @param object|string object
