@@ -1,10 +1,10 @@
 <?php
 
-namespace LchTranslateBundle\Event;
+namespace Lch\TranslateBundle\Event;
 
 /**
  * Class LchTranslateBundleEvents
- * @package LchTranslateBundle\Event
+ * @package Lch\TranslateBundle\Event
  */
 class LchTranslateBundleEvents
 {

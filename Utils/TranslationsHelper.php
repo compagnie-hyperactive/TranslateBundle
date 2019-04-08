@@ -1,8 +1,8 @@
 <?php
 
-namespace LchTranslateBundle\Utils;
+namespace Lch\TranslateBundle\Utils;
 
-use LchTranslateBundle\Model\Behavior\Translatable;
+use Lch\TranslateBundle\Model\Behavior\Translatable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;

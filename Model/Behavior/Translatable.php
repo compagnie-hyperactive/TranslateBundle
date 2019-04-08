@@ -1,6 +1,6 @@
 <?php
 
-namespace LchTranslateBundle\Model\Behavior;
+namespace Lch\TranslateBundle\Model\Behavior;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Trait Translatable
- * @package LchTranslateBundle\Model\Behavior
+ * @package Lch\TranslateBundle\Model\Behavior
  */
 trait Translatable
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace LchTranslateBundle\EventListener;
+namespace Lch\TranslateBundle\EventListener;
 
-use LchTranslateBundle\Utils\TranslationsHelper;
+use Lch\TranslateBundle\Utils\TranslationsHelper;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
@@ -11,7 +11,7 @@ use Doctrine\ORM\Events;
  * Todo: Validation LifeCycleCallback
  *
  * Class TranslatableEventSubscriber
- * @package LchTranslateBundle\EventListener
+ * @package Lch\TranslateBundle\EventListener
  */
 class TranslatableEventSubscriber implements EventSubscriber
 {

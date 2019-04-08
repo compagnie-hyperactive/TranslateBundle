@@ -2,30 +2,30 @@ services:
 
   # ________ UTILS
   lch.translate.translations_helper:
-    class: LchTranslateBundle\Utils\TranslationsHelper
+    class: Lch\TranslateBundle\Utils\TranslationsHelper
     arguments: ['@parameter_bag', '@doctrine.orm.default_entity_manager']
 
   lch.translate.lang_switch_helper:
-    class: LchTranslateBundle\Utils\LangSwitchHelper
+    class: Lch\TranslateBundle\Utils\LangSwitchHelper
     arguments: ['@lch.translate.translations_helper', '@router', '@request_stack', '@doctrine.orm.default_entity_manager']
   # ________
 
   # ________ SUBSCRIBERS
-  LchTranslateBundle\EventListener\TranslatableEventSubscriber:
+  Lch\TranslateBundle\EventListener\TranslatableEventSubscriber:
     arguments: ['@lch.translate.translations_helper']
     tags:
       - { name: doctrine.event_subscriber }
   # ________
 
   # ________ FORMS
-  LchTranslateBundle\Form\Type\TranslatedParentType:
+  Lch\TranslateBundle\Form\Type\TranslatedParentType:
     arguments: ['@lch.translate.translations_helper', '@request_stack', '@event_dispatcher']
     tags:
       - { name: form.type }
   # ________
 
   # ________ TWIG
-  LchTranslateBundle\Twig\LchTranslateBundleExtension:
+  Lch\TranslateBundle\Twig\LchTranslateBundleExtension:
     arguments: ['@lch.translate.lang_switch_helper']
     tags:
       - { name: twig.runtime }
