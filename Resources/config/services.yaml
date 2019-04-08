@@ -18,6 +18,11 @@ services:
   # ________
 
   # ________ FORMS
+  Lch\TranslateBundle\Form\Type\LanguageType:
+    arguments: ['@lch.translate.translations_helper']
+    tags:
+    - { name: form.type }
+
   Lch\TranslateBundle\Form\Type\TranslatedParentType:
     arguments: ['@lch.translate.translations_helper', '@request_stack', '@event_dispatcher']
     tags:

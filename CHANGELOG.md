@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## v0.2.0 – Unreleased
 ### Added
+- LanguageType form
 - Method in `TranslationsHelper` to check if translations are enabled
 - This changelog (:
 - Default value to `available_languages` param
