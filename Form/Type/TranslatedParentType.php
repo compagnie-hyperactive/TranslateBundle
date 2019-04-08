@@ -1,11 +1,11 @@
 <?php
 
-namespace LchTranslateBundle\Form\Type;
+namespace Lch\TranslateBundle\Form\Type;
 
-use LchTranslateBundle\Event\GuessingTranslatedParentLabelEvent;
-use LchTranslateBundle\Event\LchTranslateBundleEvents;
-use LchTranslateBundle\Event\QueryingTranslatedParentEvent;
-use LchTranslateBundle\Utils\TranslationsHelper;
+use Lch\TranslateBundle\Event\GuessingTranslatedParentLabelEvent;
+use Lch\TranslateBundle\Event\LchTranslateBundleEvents;
+use Lch\TranslateBundle\Event\QueryingTranslatedParentEvent;
+use Lch\TranslateBundle\Utils\TranslationsHelper;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -15,7 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class TranslatedParentType
- * @package LchTranslateBundle\Form\Type
+ * @package Lch\TranslateBundle\Form\Type
  */
 class TranslatedParentType extends AbstractType
 {

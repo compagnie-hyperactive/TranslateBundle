@@ -1,13 +1,13 @@
 <?php
 
-namespace LchTranslateBundle\DependencyInjection;
+namespace Lch\TranslateBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
  * Class Configuration
- * @package LchTranslateBundle\DependencyInjection
+ * @package Lch\TranslateBundle\DependencyInjection
  */
 class Configuration implements ConfigurationInterface
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace LchTranslateBundle\Event;
+namespace Lch\TranslateBundle\Event;
 
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Class QueryingTranslatedParentEvent
- * @package LchTranslateBundle\Event
+ * @package Lch\TranslateBundle\Event
  */
 class QueryingTranslatedParentEvent extends Event
 {

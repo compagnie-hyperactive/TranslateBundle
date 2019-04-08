@@ -1,6 +1,6 @@
 <?php
 
-namespace LchTranslateBundle\Utils;
+namespace Lch\TranslateBundle\Utils;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -9,7 +9,7 @@ use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Class LangSwitchHelper
- * @package LchTranslateBundle\Utils
+ * @package Lch\TranslateBundle\Utils
  */
 class LangSwitchHelper
 {

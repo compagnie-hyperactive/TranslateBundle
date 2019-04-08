@@ -2,12 +2,12 @@
 
 namespace LchTranslateBundle\Twig;
 
-use LchTranslateBundle\Utils\LangSwitchHelper;
+use Lch\TranslateBundle\Utils\LangSwitchHelper;
 use Twig\Extension\RuntimeExtensionInterface;
 
 /**
  * Class LchTranslateBundleRuntime
- * @package LchTranslateBundle\Twig
+ * @package Lch\TranslateBundle\Twig
  */
 class LchTranslateBundleRuntime implements RuntimeExtensionInterface
 {

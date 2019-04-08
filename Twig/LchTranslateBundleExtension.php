@@ -1,13 +1,13 @@
 <?php
 
-namespace LchTranslateBundle\Twig;
+namespace Lch\TranslateBundle\Twig;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 /**
  * Class LchTranslateBundleExtension
- * @package LchTranslateBundle\Twig
+ * @package Lch\TranslateBundle\Twig
  */
 class LchTranslateBundleExtension extends AbstractExtension
 {

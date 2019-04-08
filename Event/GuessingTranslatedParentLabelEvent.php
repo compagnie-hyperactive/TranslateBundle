@@ -1,12 +1,12 @@
 <?php
 
-namespace LchTranslateBundle\Event;
+namespace Lch\TranslateBundle\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Class GuessingTranslatedParentLabelEvent
- * @package LchTranslateBundle\Event
+ * @package Lch\TranslateBundle\Event
  */
 class GuessingTranslatedParentLabelEvent extends Event
 {
