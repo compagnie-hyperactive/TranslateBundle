@@ -1,6 +1,6 @@
 <?php
 
-namespace LchTranslateBundle\Twig;
+namespace Lch\TranslateBundle\Twig;
 
 use Lch\TranslateBundle\Utils\LangSwitchHelper;
 use Twig\Extension\RuntimeExtensionInterface;
