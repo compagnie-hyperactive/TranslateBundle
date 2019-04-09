@@ -25,7 +25,9 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->arrayNode('available_languages')
-                    ->scalarPrototype()->end()
+                    ->scalarPrototype()
+                    ->end()
+                    ->defaultValue([])
                 ->end()
             ->end()
         ;

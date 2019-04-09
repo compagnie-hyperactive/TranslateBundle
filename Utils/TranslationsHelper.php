@@ -42,10 +42,24 @@ class TranslationsHelper
     public function getAvailableLanguages(): array
     {
         if (!$this->availableLanguages) {
-            $this->availableLanguages = $this->params->get('available_languages');
+            $this->availableLanguages = $this->params->get('lch.translate.available_languages');
         }
 
         return $this->availableLanguages;
+    }
+
+    /**
+     * Checks if Translate bundle system is available,
+     * through checking if `available_languages` parameter
+     * is set and not empty.
+     *
+     * @return bool
+     */
+    public function isTranslationSystemEnabled(): bool
+    {
+        $availableLanguages = $this->getAvailableLanguages();
+
+        return is_array($availableLanguages) && !empty($availableLanguages);
     }
 
     /**

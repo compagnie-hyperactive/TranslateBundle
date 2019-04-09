@@ -55,7 +55,7 @@ class TranslatedParentType extends AbstractType
             'class' => null,
             'required' => false,
             'choice_label' => function ($entity) {
-                $label = (string) $entity;
+                $label = $entity->getId();
                 $this->eventDispatcher->dispatch(
                     LchTranslateBundleEvents::GUESSING_TRANSLATED_PARENT_LABEL,
                     new GuessingTranslatedParentLabelEvent($label, $entity)
