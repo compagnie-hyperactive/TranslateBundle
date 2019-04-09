@@ -50,7 +50,7 @@ class LangSwitchHelper
      */
     public function getAvailableI18nPaths(object $translatableEntity = null): array
     {
-        $request = $this->requestStack->getCurrentRequest();
+        $request = $this->requestStack->getMasterRequest();
 
         return $translatableEntity !== null
             ? $this->getShowedEntityPaths($request, $translatableEntity)
