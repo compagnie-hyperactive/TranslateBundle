@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This changelog (:
 - Default value to `available_languages` param
 ### Fixed
+- Not using string cast anymore as entity default label
 - Wrong format for `available_languages` param
 
 ## [v0.1.1](https://github.com/compagnie-hyperactive/TranslateBundle/releases/tag/v0.1.1) – 2019-04-08
