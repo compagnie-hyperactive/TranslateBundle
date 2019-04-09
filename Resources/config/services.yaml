@@ -31,6 +31,9 @@ services:
 
   # ________ TWIG
   Lch\TranslateBundle\Twig\LchTranslateBundleExtension:
+    tags:
+      - { name: twig.extension }
+  Lch\TranslateBundle\Twig\LchTranslateBundleRuntime:
     arguments: ['@lch.translate.lang_switch_helper']
     tags:
       - { name: twig.runtime }
