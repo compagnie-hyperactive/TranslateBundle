@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+# [v0.2.2](https://github.com/compagnie-hyperactive/TranslateBundle/releases/tag/v0.2.2) - Unreleased
+### Fixed
+- Entity could be its own translated parent, which makes no sense
+
 ## [v0.2.1](https://github.com/compagnie-hyperactive/TranslateBundle/releases/tag/v0.2.1) – 2019-04-09
 ### Fixed
 - Twig extension was causing fatal error in some cases

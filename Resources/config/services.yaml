@@ -12,7 +12,7 @@ services:
 
   # ________ SUBSCRIBERS
   Lch\TranslateBundle\EventListener\TranslatableEventSubscriber:
-    arguments: ['@lch.translate.translations_helper']
+    arguments: ['@lch.translate.translations_helper', '@validator']
     tags:
       - { name: doctrine.event_subscriber }
   # ________

@@ -2,10 +2,13 @@
 
 namespace Lch\TranslateBundle\EventListener;
 
+use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Lch\TranslateBundle\Utils\TranslationsHelper;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Todo: Validation LifeCycleCallback
@@ -18,13 +21,19 @@ class TranslatableEventSubscriber implements EventSubscriber
     /** @var TranslationsHelper $translationsHelper */
     protected $translationsHelper;
 
+    /** @var ValidatorInterface $validator */
+    protected $validator;
+
     /**
      * TranslatableEntityEventSubscriber constructor.
      * @param TranslationsHelper $translationsHelper
+     * @param ValidatorInterface $validator
      */
-    public function __construct(TranslationsHelper $translationsHelper)
-    {
+    public function __construct(TranslationsHelper $translationsHelper,
+                                ValidatorInterface $validator
+    ) {
         $this->translationsHelper = $translationsHelper;
+        $this->validator = $validator;
     }
 
     /**
@@ -33,7 +42,8 @@ class TranslatableEventSubscriber implements EventSubscriber
     public function getSubscribedEvents(): array
     {
         return [
-            Events::loadClassMetadata
+            Events::loadClassMetadata,
+            Events::prePersist,
         ];
     }
 
@@ -61,5 +71,35 @@ class TranslatableEventSubscriber implements EventSubscriber
             'targetEntity' => $class,
             'mappedBy'     => 'translatedParent'
         ]);
+    }
+
+    /**
+     * @param LifecycleEventArgs $args
+     *
+     * @return void
+     */
+    public function prePersist(LifecycleEventArgs $args): void
+    {
+        $entity = $args->getObject();
+        if (!$this->translationsHelper->isEntityTranslatable($entity)) {
+            return;
+        }
+
+        if (null === $entity->getTranslatedParent()) {
+            return;
+        }
+
+        $errors = $this->validator->validate($entity);
+        if ($entity->getTranslatedParent()->getId() === $entity->getId()) {
+            $errors->add(new ConstraintViolation(
+                'Entity cannot be its own translatable parent.',
+                '',
+                [],
+                $entity,
+                'translatedParent',
+                $entity->getId()
+            ));
+        }
+
     }
 }
