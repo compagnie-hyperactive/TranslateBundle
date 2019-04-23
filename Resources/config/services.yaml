@@ -19,7 +19,7 @@ services:
 
   # ________ FORMS
   Lch\TranslateBundle\Form\Type\LanguageType:
-    arguments: ['@lch.translate.translations_helper']
+    arguments: ['@lch.translate.translations_helper', '@request_stack']
     tags:
     - { name: form.type }
 
