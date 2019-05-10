@@ -3,6 +3,7 @@
 namespace Lch\TranslateBundle\Utils;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Lch\TranslateBundle\Model\Behavior\Translatable;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
@@ -67,7 +68,7 @@ class LangSwitchHelper
 
         foreach ($this->translationsHelper->getAvailableLanguages() as $language) {
             if ($language !== $currentLocale) {
-                $paths[] = $this->router->generate(
+                $paths[$language] = $this->router->generate(
                     $currentRoute, ['_locale' => $language]
                 );
             }
@@ -102,10 +103,11 @@ class LangSwitchHelper
 
         $paths = [];
         $currentRoute = $request->get('_route');
+        /** @var Translatable $availableEntity */
         foreach ($availableEntities as $availableEntity) {
             // Todo: Must ensure that very translatable entity
             // implements slug property
-            $paths[] = $this->router->generate(
+            $paths[$availableEntity->getLanguage()] = $this->router->generate(
                 $currentRoute, ['slug' => $availableEntity->getSlug()]
             );
         }
