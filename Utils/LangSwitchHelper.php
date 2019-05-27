@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Lch\TranslateBundle\Model\Behavior\Translatable;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -68,9 +69,16 @@ class LangSwitchHelper
 
         foreach ($this->translationsHelper->getAvailableLanguages() as $language) {
             if ($language !== $currentLocale) {
-                $paths[$language] = $this->router->generate(
-                    $currentRoute, ['_locale' => $language]
-                );
+                try {
+                    $paths[$language] = $this->router->generate(
+                        $currentRoute, ['_locale' => $language]
+                    );
+                } catch (RouteNotFoundException $e) {
+                    $paths[$language] = $this->router->generate(
+                        $currentRoute . '.' . $language,
+                        ['_locale' => $language]
+                    );
+                }
             }
         }
 
