@@ -57,9 +57,14 @@ class LangSwitchHelper
         return $translatableEntity !== null
             ? $this->getShowedEntityPaths($request, $translatableEntity)
             : $this->getStaticPaths($request)
-        ;
+            ;
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return array
+     */
     public function getStaticPaths(Request $request): array
     {
         $paths = [];
@@ -69,20 +74,40 @@ class LangSwitchHelper
 
         foreach ($this->translationsHelper->getAvailableLanguages() as $language) {
             if ($language !== $currentLocale) {
-                try {
-                    $paths[$language] = $this->router->generate(
-                        $currentRoute, ['_locale' => $language]
-                    );
-                } catch (RouteNotFoundException $e) {
-                    $paths[$language] = $this->router->generate(
-                        $currentRoute . '.' . $language,
-                        ['_locale' => $language]
-                    );
-                }
+                $paths[$language] = $this->getTranslatedPath($currentRoute, [
+                    '_locale' => $language
+                ]);
             }
         }
 
         return $paths;
+    }
+
+    /**
+     * Route parameters must include "_locale" parameter.
+     *
+     * @param string $route
+     * @param array $parameters
+     *
+     * @return string
+     */
+    public function getTranslatedPath(string $route, array $parameters): string
+    {
+        if (!isset($parameters['_locale'])) {
+            throw new \UnexpectedValueException('"_locale" parameter is mandatory in order to translate route.');
+        }
+
+        try {
+            return $this->router->generate(
+                $route,
+                $parameters
+            );
+        } catch (RouteNotFoundException $e) {
+            return $this->router->generate(
+                $route . '.' . $parameters['_locale'],
+                $parameters
+            );
+        }
     }
 
     /**

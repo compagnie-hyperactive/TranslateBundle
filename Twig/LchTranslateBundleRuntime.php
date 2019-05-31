@@ -32,4 +32,15 @@ class LchTranslateBundleRuntime implements RuntimeExtensionInterface
     {
         return $this->langSwitchHelper->getAvailableI18nPaths($translatableEntity);
     }
+
+    /**
+     * @param string $route
+     * @param array $parameters
+     *
+     * @return string
+     */
+    public function getTranslatedPath(string $route, array $parameters): string
+    {
+        return $this->langSwitchHelper->getTranslatedPath($route, $parameters);
+    }
 }
