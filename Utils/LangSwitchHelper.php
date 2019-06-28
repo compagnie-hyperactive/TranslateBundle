@@ -97,15 +97,18 @@ class LangSwitchHelper
             throw new \UnexpectedValueException('"_locale" parameter is mandatory in order to translate route.');
         }
 
+        // In the generate calls below, we merge "official" route parameters
+        // with all other query parameters given, to be sure to present exactly
+        // the same URL state that was given
         try {
             return $this->router->generate(
                 $route,
-                $parameters
+                array_merge($parameters, $this->requestStack->getMasterRequest()->query->all())
             );
         } catch (RouteNotFoundException $e) {
             return $this->router->generate(
                 $route . '.' . $parameters['_locale'],
-                $parameters
+                array_merge($parameters, $this->requestStack->getMasterRequest()->query->all())
             );
         }
     }
