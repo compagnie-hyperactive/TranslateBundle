@@ -36,11 +36,12 @@ class LchTranslateBundleRuntime implements RuntimeExtensionInterface
     /**
      * @param string $route
      * @param array $parameters
+     * @param bool $full Wether to merge query params with route parameters
      *
      * @return string
      */
-    public function getTranslatedPath(string $route, array $parameters): string
+    public function getTranslatedPath(string $route, array $parameters, $full = false): string
     {
-        return $this->langSwitchHelper->getTranslatedPath($route, $parameters);
+        return $this->langSwitchHelper->getTranslatedPath($route, $parameters, $full);
     }
 }

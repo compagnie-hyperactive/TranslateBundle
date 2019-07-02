@@ -88,27 +88,33 @@ class LangSwitchHelper
      *
      * @param string $route
      * @param array $parameters
+     * @param bool $full Wether to merge query params with route parameters
      *
      * @return string
      */
-    public function getTranslatedPath(string $route, array $parameters): string
+    public function getTranslatedPath(string $route, array $parameters, $full = false): string
     {
         if (!isset($parameters['_locale'])) {
             throw new \UnexpectedValueException('"_locale" parameter is mandatory in order to translate route.');
         }
 
+        // If full is provided,
         // In the generate calls below, we merge "official" route parameters
         // with all other query parameters given, to be sure to present exactly
         // the same URL state that was given
+        if($full) {
+            $parameters = array_merge($parameters, $this->requestStack->getMasterRequest()->query->all());
+        }
+
         try {
             return $this->router->generate(
                 $route,
-                array_merge($parameters, $this->requestStack->getMasterRequest()->query->all())
+                $parameters
             );
         } catch (RouteNotFoundException $e) {
             return $this->router->generate(
                 $route . '.' . $parameters['_locale'],
-                array_merge($parameters, $this->requestStack->getMasterRequest()->query->all())
+                $parameters
             );
         }
     }
