@@ -79,7 +79,7 @@ class TranslationsHelper
             throw new UnexpectedValueException($class, 'string');
         }
 
-        return in_array(
+        return class_exists($class) && in_array(
             Translatable::class,
             class_uses($class),
             true
