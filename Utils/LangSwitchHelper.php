@@ -69,14 +69,21 @@ class LangSwitchHelper
     {
         $paths = [];
 
-        $currentRoute = $request->get('_route');
-        $currentLocale = $request->getLocale();
+        $currentRoute       = $request->get('_route');
+        $currentRouteParams = $request->get('_route_params');
+        $currentLocale      = $request->getLocale();
 
         foreach ($this->translationsHelper->getAvailableLanguages() as $language) {
             if ($language !== $currentLocale) {
-                $paths[$language] = $this->getTranslatedPath($currentRoute, [
-                    '_locale' => $language
-                ]);
+                $paths[$language] = $this->getTranslatedPath(
+                    $currentRoute,
+                    array_merge(
+                        [
+                            '_locale' => $language
+                        ],
+                        $currentRouteParams
+                    )
+                );
             }
         }
 
