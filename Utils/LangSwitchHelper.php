@@ -11,6 +11,7 @@ use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Class LangSwitchHelper
+ *
  * @package Lch\TranslateBundle\Utils
  */
 class LangSwitchHelper
@@ -29,61 +30,57 @@ class LangSwitchHelper
 
     /**
      * LangSwitchHelper constructor.
+     *
      * @param TranslationsHelper $translationsHelper
      * @param RouterInterface $router
      * @param RequestStack $requestStack
      * @param EntityManagerInterface $em
      */
-    public function __construct(TranslationsHelper $translationsHelper,
-                                RouterInterface $router,
-                                RequestStack $requestStack,
-                                EntityManagerInterface $em
+    public function __construct(
+        TranslationsHelper $translationsHelper,
+        RouterInterface $router,
+        RequestStack $requestStack,
+        EntityManagerInterface $em
     ) {
         $this->translationsHelper = $translationsHelper;
-        $this->router = $router;
-        $this->requestStack = $requestStack;
-        $this->em = $em;
+        $this->router             = $router;
+        $this->requestStack       = $requestStack;
+        $this->em                 = $em;
     }
 
     /**
      * @param object|null $translatableEntity
+     * @param array $parameters
      *
      * @return array
      */
-    public function getAvailableI18nPaths(object $translatableEntity = null): array
+    public function getAvailableI18nPaths(object $translatableEntity = null, $parameters = []): array
     {
         $request = $this->requestStack->getMasterRequest();
 
         return $translatableEntity !== null
             ? $this->getShowedEntityPaths($request, $translatableEntity)
-            : $this->getStaticPaths($request)
-            ;
+            : $this->getStaticPaths($request, $parameters);
     }
 
     /**
      * @param Request $request
+     * @param array $parameters
      *
      * @return array
      */
-    public function getStaticPaths(Request $request): array
+    public function getStaticPaths(Request $request, $parameters = []): array
     {
         $paths = [];
 
-        $currentRoute       = $request->get('_route');
-        $currentRouteParams = $request->get('_route_params');
-        $currentLocale      = $request->getLocale();
+        $currentRoute  = $request->get('_route');
+        $currentLocale = $request->getLocale();
 
         foreach ($this->translationsHelper->getAvailableLanguages() as $language) {
             if ($language !== $currentLocale) {
-                $paths[$language] = $this->getTranslatedPath(
-                    $currentRoute,
-                    array_merge(
-                        [
-                            '_locale' => $language
-                        ],
-                        $currentRouteParams
-                    )
-                );
+                $paths[$language] = $this->getTranslatedPath($currentRoute, [
+                                                                                '_locale' => $language
+                                                                            ] + $parameters);
             }
         }
 
@@ -101,7 +98,7 @@ class LangSwitchHelper
      */
     public function getTranslatedPath(string $route, array $parameters, $full = false): string
     {
-        if (!isset($parameters['_locale'])) {
+        if (! isset($parameters['_locale'])) {
             throw new \UnexpectedValueException('"_locale" parameter is mandatory in order to translate route.');
         }
 
@@ -109,7 +106,7 @@ class LangSwitchHelper
         // In the generate calls below, we merge "official" route parameters
         // with all other query parameters given, to be sure to present exactly
         // the same URL state that was given
-        if($full) {
+        if ($full) {
             $parameters = array_merge($parameters, $this->requestStack->getMasterRequest()->query->all());
         }
 
@@ -129,11 +126,12 @@ class LangSwitchHelper
     /**
      * @param Request $request
      * @param object $entity
+     *
      * @return array
      */
     public function getShowedEntityPaths(Request $request, object $entity): array
     {
-        if (!$this->translationsHelper->isEntityTranslatable($entity)) {
+        if (! $this->translationsHelper->isEntityTranslatable($entity)) {
             throw new \UnexpectedValueException('Expecting translatable entity.');
         }
 
@@ -141,16 +139,14 @@ class LangSwitchHelper
         $qb
             ->from(get_class($entity), 'e')
             ->select('e')
-
             ->where('e.translatedParent = :current_entity')
             ->orWhere(':current_entity MEMBER OF e.translatedChildren')
             ->andWhere('e != :current_entity')
-            ->setParameter('current_entity', $entity)
-        ;
+            ->setParameter('current_entity', $entity);
 
         $availableEntities = $qb->getQuery()->getResult();
 
-        $paths = [];
+        $paths        = [];
         $currentRoute = $request->get('_route');
         /** @var Translatable $availableEntity */
         foreach ($availableEntities as $availableEntity) {
