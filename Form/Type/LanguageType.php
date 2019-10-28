@@ -34,15 +34,9 @@ class LanguageType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $availableLanguages = $this->translationsHelper->getAvailableLanguages();
-
-        $defaults = [];
-        $defaults['choices'] = $availableLanguages;
-
-        $currentLocale = $this->requestStack->getCurrentRequest()->getLocale();
-        if (in_array($currentLocale, $availableLanguages, true)) {
-            $defaults['data'] = $currentLocale;
-        }
-        $resolver->setDefaults($defaults);
+        $resolver->setDefaults([
+            'choices' => $availableLanguages
+        ]);
     }
 
     public function getParent(): string
