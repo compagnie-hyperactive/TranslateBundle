@@ -60,17 +60,20 @@ class TranslatableEventSubscriber implements EventSubscriber
             return;
         }
 
-        $metadata->mapManyToOne([
-            'fieldName'    => 'translatedParent',
-            'targetEntity' => $class,
-            'inversedBy'   => 'translatedChildren'
-        ]);
-
-        $metadata->mapOneToMany([
-            'fieldName'    => 'translatedChildren',
-            'targetEntity' => $class,
-            'mappedBy'     => 'translatedParent'
-        ]);
+        if (!array_key_exists('translatedParent', $metadata->getAssociationMappings())) {
+            $metadata->mapManyToOne([
+                'fieldName'    => 'translatedParent',
+                'targetEntity' => $class,
+                'inversedBy'   => 'translatedChildren'
+            ]);
+        }
+        if (!array_key_exists('translatedChildren', $metadata->getAssociationMappings())) {
+            $metadata->mapOneToMany([
+                'fieldName' => 'translatedChildren',
+                'targetEntity' => $class,
+                'mappedBy' => 'translatedParent'
+            ]);
+        }
     }
 
     /**

@@ -29,7 +29,8 @@ class TranslationsHelper
      */
     public function __construct(ParameterBagInterface $params,
                                 EntityManagerInterface $em
-    ) {
+    )
+    {
         $this->params = $params;
         $this->em = $em;
     }
@@ -74,15 +75,38 @@ class TranslationsHelper
     public function isEntityTranslatable($object): bool
     {
         $class = is_object($object) ? get_class($object) : $object;
-
         if (!is_string($class)) {
             throw new UnexpectedValueException($class, 'string');
         }
-
         return class_exists($class) && in_array(
-            Translatable::class,
-            class_uses($class),
-            true
-        );
+                Translatable::class,
+                $this->classUsesRecursive($class),
+                true
+            );
+    }
+
+    /**
+     * @param $class
+     * @param bool $autoload
+     * @return array
+     */
+    protected function classUsesRecursive($class, $autoload = true)
+    {
+        $traits = [];
+        // Get traits of all parent classes
+        do {
+            $traits = array_merge(class_uses($class, $autoload), $traits);
+        } while ($class = get_parent_class($class));
+        // Get traits of all parent traits
+        $traitsToSearch = $traits;
+        while (!empty($traitsToSearch)) {
+            $newTraits = class_uses(array_pop($traitsToSearch), $autoload);
+            $traits = array_merge($newTraits, $traits);
+            $traitsToSearch = array_merge($newTraits, $traitsToSearch);
+        };
+        foreach ($traits as $trait => $same) {
+            $traits = array_merge(class_uses($trait, $autoload), $traits);
+        }
+        return array_unique($traits);
     }
 }
