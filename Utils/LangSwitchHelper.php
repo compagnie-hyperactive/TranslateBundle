@@ -152,8 +152,12 @@ class LangSwitchHelper
         foreach ($availableEntities as $availableEntity) {
             // Todo: Must ensure that very translatable entity
             // implements slug property
-            $paths[$availableEntity->getLanguage()] = $this->router->generate(
-                $currentRoute, ['slug' => $availableEntity->getSlug()]
+            $paths[$availableEntity->getLanguage()] = $this->getTranslatedPath(
+                $currentRoute,
+                [
+                    'slug' => $availableEntity->getSlug(),
+                    '_locale' => $availableEntity->getLanguage()
+                ]
             );
         }
 
