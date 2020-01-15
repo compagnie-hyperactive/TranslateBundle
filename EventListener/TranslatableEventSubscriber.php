@@ -14,6 +14,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  * Todo: Validation LifeCycleCallback
  *
  * Class TranslatableEventSubscriber
+ *
  * @package Lch\TranslateBundle\EventListener
  */
 class TranslatableEventSubscriber implements EventSubscriber
@@ -26,14 +27,16 @@ class TranslatableEventSubscriber implements EventSubscriber
 
     /**
      * TranslatableEntityEventSubscriber constructor.
+     *
      * @param TranslationsHelper $translationsHelper
      * @param ValidatorInterface $validator
      */
-    public function __construct(TranslationsHelper $translationsHelper,
-                                ValidatorInterface $validator
+    public function __construct(
+        TranslationsHelper $translationsHelper,
+        ValidatorInterface $validator
     ) {
         $this->translationsHelper = $translationsHelper;
-        $this->validator = $validator;
+        $this->validator          = $validator;
     }
 
     /**
@@ -55,23 +58,32 @@ class TranslatableEventSubscriber implements EventSubscriber
     public function loadClassMetadata(LoadClassMetadataEventArgs $args): void
     {
         $metadata = $args->getClassMetadata();
-        $class = $metadata->getName();
-        if (!$this->translationsHelper->isEntityTranslatable($class)) {
+        $class    = $metadata->getName();
+        if (! $this->translationsHelper->isEntityTranslatable($class)) {
             return;
         }
 
-        if (!array_key_exists('translatedParent', $metadata->getAssociationMappings())) {
+        if (! array_key_exists('translatedParent', $metadata->getAssociationMappings())) {
             $metadata->mapManyToOne([
                 'fieldName'    => 'translatedParent',
                 'targetEntity' => $class,
-                'inversedBy'   => 'translatedChildren'
+                'inversedBy'   => 'translatedChildren',
+
+                // This is for ensuring flexible translation deletions
+                'joinColumns'   => [
+                    [
+                        'name'     => 'translated_parent_id',
+                        'referencedColumnName'=> 'id',
+                        'onDelete' => 'SET NULL',
+                    ],
+                ],
             ]);
         }
-        if (!array_key_exists('translatedChildren', $metadata->getAssociationMappings())) {
+        if (! array_key_exists('translatedChildren', $metadata->getAssociationMappings())) {
             $metadata->mapOneToMany([
-                'fieldName' => 'translatedChildren',
+                'fieldName'    => 'translatedChildren',
                 'targetEntity' => $class,
-                'mappedBy' => 'translatedParent'
+                'mappedBy'     => 'translatedParent'
             ]);
         }
     }
@@ -84,7 +96,7 @@ class TranslatableEventSubscriber implements EventSubscriber
     public function prePersist(LifecycleEventArgs $args): void
     {
         $entity = $args->getObject();
-        if (!$this->translationsHelper->isEntityTranslatable($entity)) {
+        if (! $this->translationsHelper->isEntityTranslatable($entity)) {
             return;
         }
 
