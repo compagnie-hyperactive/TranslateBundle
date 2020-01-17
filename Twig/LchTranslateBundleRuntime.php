@@ -3,6 +3,7 @@
 namespace Lch\TranslateBundle\Twig;
 
 use Lch\TranslateBundle\Utils\LangSwitchHelper;
+use Symfony\Component\Routing\Router;
 use Twig\Extension\RuntimeExtensionInterface;
 
 /**
@@ -38,11 +39,12 @@ class LchTranslateBundleRuntime implements RuntimeExtensionInterface
      * @param string $route
      * @param array $parameters
      * @param bool $full Wether to merge query params with route parameters
+     * @param int $referenceType the result type : relative or absolute
      *
      * @return string
      */
-    public function getTranslatedPath(string $route, array $parameters, $full = false): string
+    public function getTranslatedUrl(string $route, array $parameters, $full = false, int $referenceType = Router::ABSOLUTE_PATH): string
     {
-        return $this->langSwitchHelper->getTranslatedPath($route, $parameters, $full);
+        return $this->langSwitchHelper->getTranslatedUrl($route, $parameters, $full, $referenceType);
     }
 }

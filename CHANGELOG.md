@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #[v0.4.0](https://github.com/compagnie-hyperactive/TranslateBundle/releases/tag/v0.4.0) - 2019-05-31
 ### Added
-- `translated_path` methods
+- `translated_url` methods
 
 #[v0.3.1](https://github.com/compagnie-hyperactive/TranslateBundle/releases/tag/v0.3.1) - 2019-05-27
 ### Fixed

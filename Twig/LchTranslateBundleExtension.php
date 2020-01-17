@@ -18,7 +18,7 @@ class LchTranslateBundleExtension extends AbstractExtension
     {
         return [
             new TwigFunction('available_i18n_paths', [LchTranslateBundleRuntime::class, 'getAvailableI18nPaths']),
-            new TwigFunction('translated_path', [LchTranslateBundleRuntime::class, 'getTranslatedPath'])
+            new TwigFunction('translated_url', [LchTranslateBundleRuntime::class, 'getTranslatedUrl'])
         ];
     }
 }

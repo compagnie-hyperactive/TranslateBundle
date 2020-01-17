@@ -7,6 +7,7 @@ use Lch\TranslateBundle\Model\Behavior\Translatable;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -78,7 +79,7 @@ class LangSwitchHelper
 
         foreach ($this->translationsHelper->getAvailableLanguages() as $language) {
             if ($language !== $currentLocale) {
-                $paths[$language] = $this->getTranslatedPath($currentRoute, [
+                $paths[$language] = $this->getTranslatedUrl($currentRoute, [
                                                                                 '_locale' => $language
                                                                             ] + $parameters);
             }
@@ -88,15 +89,17 @@ class LangSwitchHelper
     }
 
     /**
+     * Generates a relative I18N URL for given route
      * Route parameters must include "_locale" parameter.
      *
      * @param string $route
      * @param array $parameters
      * @param bool $full Wether to merge query params with route parameters
+     * @param int $referenceType the result type : relative or absolute
      *
      * @return string
      */
-    public function getTranslatedPath(string $route, array $parameters, $full = false): string
+    public function getTranslatedUrl(string $route, array $parameters, $full = false, int $referenceType = Router::ABSOLUTE_PATH): string
     {
         if (! isset($parameters['_locale'])) {
             throw new \UnexpectedValueException('"_locale" parameter is mandatory in order to translate route.');
@@ -113,7 +116,8 @@ class LangSwitchHelper
         try {
             return $this->router->generate(
                 $route,
-                $parameters
+                $parameters,
+                $referenceType
             );
         } catch (RouteNotFoundException $e) {
             return $this->router->generate(
@@ -152,7 +156,7 @@ class LangSwitchHelper
         foreach ($availableEntities as $availableEntity) {
             // Todo: Must ensure that very translatable entity
             // implements slug property
-            $paths[$availableEntity->getLanguage()] = $this->getTranslatedPath(
+            $paths[$availableEntity->getLanguage()] = $this->getTranslatedUrl(
                 $currentRoute,
                 [
                     'slug' => $availableEntity->getSlug(),
