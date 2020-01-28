@@ -3,7 +3,10 @@
 namespace Lch\TranslateBundle\Utils;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Lch\TranslateBundle\Event\AfterFindingEntityTranslationsEvent;
 use Lch\TranslateBundle\Model\Behavior\Translatable;
+use Lch\TranslateBundle\TranslateEvents;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
@@ -29,6 +32,9 @@ class LangSwitchHelper
     /** @var EntityManagerInterface $em */
     protected $em;
 
+    /** @var EventDispatcherInterface $eventDispatcher */
+    protected $eventDispatcher;
+
     /**
      * LangSwitchHelper constructor.
      *
@@ -41,12 +47,14 @@ class LangSwitchHelper
         TranslationsHelper $translationsHelper,
         RouterInterface $router,
         RequestStack $requestStack,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->translationsHelper = $translationsHelper;
         $this->router             = $router;
         $this->requestStack       = $requestStack;
         $this->em                 = $em;
+        $this->eventDispatcher    = $eventDispatcher;
     }
 
     /**
@@ -80,8 +88,8 @@ class LangSwitchHelper
         foreach ($this->translationsHelper->getAvailableLanguages() as $language) {
             if ($language !== $currentLocale) {
                 $paths[$language] = $this->getTranslatedUrl($currentRoute, [
-                                                                                '_locale' => $language
-                                                                            ] + $parameters);
+                                                                               '_locale' => $language
+                                                                           ] + $parameters);
             }
         }
 
@@ -99,8 +107,12 @@ class LangSwitchHelper
      *
      * @return string
      */
-    public function getTranslatedUrl(string $route, array $parameters, $full = false, int $referenceType = Router::ABSOLUTE_PATH): string
-    {
+    public function getTranslatedUrl(
+        string $route,
+        array $parameters,
+        $full = false,
+        int $referenceType = Router::ABSOLUTE_PATH
+    ): string {
         if (! isset($parameters['_locale'])) {
             throw new \UnexpectedValueException('"_locale" parameter is mandatory in order to translate route.');
         }
@@ -114,6 +126,7 @@ class LangSwitchHelper
         }
 
         try {
+//            dump($route, $parameters, $referenceType);
             return $this->router->generate(
                 $route,
                 $parameters,
@@ -150,16 +163,23 @@ class LangSwitchHelper
 
         $availableEntities = $qb->getQuery()->getResult();
 
+        $afterFindingEntityTranslationsEvent = new AfterFindingEntityTranslationsEvent($entity, $availableEntities);
+
+        $this->eventDispatcher->dispatch(
+            $afterFindingEntityTranslationsEvent,
+            TranslateEvents::AFTER_FINDING_ENTITY_TRANSLATIONS
+        );
+
         $paths        = [];
         $currentRoute = $request->get('_route');
         /** @var Translatable $availableEntity */
-        foreach ($availableEntities as $availableEntity) {
+        foreach ($afterFindingEntityTranslationsEvent->getTranslationsFound() as $availableEntity) {
             // Todo: Must ensure that very translatable entity
             // implements slug property
             $paths[$availableEntity->getLanguage()] = $this->getTranslatedUrl(
                 $currentRoute,
                 [
-                    'slug' => $availableEntity->getSlug(),
+                    'slug'    => $availableEntity->getSlug(),
                     '_locale' => $availableEntity->getLanguage()
                 ]
             );

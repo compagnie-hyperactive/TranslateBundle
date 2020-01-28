@@ -7,7 +7,7 @@ services:
 
   lch.translate.lang_switch_helper:
     class: Lch\TranslateBundle\Utils\LangSwitchHelper
-    arguments: ['@lch.translate.translations_helper', '@router', '@request_stack', '@doctrine.orm.default_entity_manager']
+    arguments: ['@lch.translate.translations_helper', '@router', '@request_stack', '@doctrine.orm.default_entity_manager', '@event_dispatcher']
   # ________
 
   # ________ SUBSCRIBERS
