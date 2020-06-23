@@ -126,7 +126,6 @@ class LangSwitchHelper
         }
 
         try {
-//            dump($route, $parameters, $referenceType);
             return $this->router->generate(
                 $route,
                 $parameters,
@@ -135,7 +134,8 @@ class LangSwitchHelper
         } catch (RouteNotFoundException $e) {
             return $this->router->generate(
                 $route . '.' . $parameters['_locale'],
-                $parameters
+                $parameters,
+                $referenceType
             );
         }
     }
